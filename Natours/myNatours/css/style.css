@@ -4,21 +4,33 @@ COLORS:
 Light green: #7ed56f
 Medium green: #55c57a
 Dark green: #28b485
+text: #777
 
 */
+
+:root {
+  /* https://stackoverflow.com/questions/40010597/how-do-i-apply-opacity-to-a-css-color-variable */
+  --light-color: 126, 213, 111; /* Don{t inculde the rgb12 */
+  --medium-color: 85, 197, 122;
+  --dark-color: 40, 180, 133;
+  --text-color: #777;
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  font-size:62.5%;
+}
 
 body {
   font-family: 'Lato', sans-serif;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1.6rem;
   line-height: 1.7;
-  color: #777;
+  color: var(--text-color);
   padding: 30px;
 }
 
@@ -26,11 +38,113 @@ body {
   height: 95vh; /* 95% of the viewport height */
   background-image:linear-gradient(
     to right bottom,
-    rgba(128, 214, 113, 0.8), 
-    rgba(39, 180, 133, 0.8)), 
+    rgba(var(--light-color), 0.8), 
+    rgba(var(--dark-color), 0.8)), 
     url('../img/hero.jpg');
   background-size: cover;
   background-position: top;
+  position: relative; /* By declaring this relative, the absolute position of the logo-box is in reference to this */
+
+  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%); /* https://bennettfeely.com/clippy/ */
+}
+
+.logo-box {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+}
+
+.logo {
+  height: 35px;
+}
+
+.logo-box:hover .logo{
+  animation: moveInRight 1.5s ease-out ;
+} /* Here we have it set so that once you hover in the logo BOX, the logo contained within animates */
+
+.text-box {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* This shifts it back 50% (in x and y) in relation to it's own size, versus before was in relation to its parent element */
+}
+
+.heading-primary {
+  color: #fff;
+  text-transform: uppercase;
+
+  backface-visibility: hidden; /* This fix/hack is to fix the 'shaking' that occurs at the end of the animation sometimes*/
+}
+
+.heading-primary-main {
+  display: block;
+  font-size: 6rem;
+  font-weight: 400;
+  letter-spacing: 35px;
+  margin-right: -35px; /* This counteracts the 35px added to the end by the letter spacing */
+
+  animation-name: moveInLeft;
+  animation-duration: 1.5s;
   
-  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  animation-timing-function:ease-out;
+
+  /* 
+    Ease in: Start slower, accelerate over time,
+    Ease Out: The opposite (start faster, and slow down),
+    Many more
+  */
+
+  /* animation-iteration-count: 3; */
+  /* animation-delay: 3s; */
+}
+
+.heading-primary-sub {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 17.4px;
+  margin-right: -17.4px; /* This counteracts the 17.4px added to the end by the letter spacing */
+
+  /* animation-name: moveInRight;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-out; 
+  Short-hand for animation:
+  */
+
+  animation: moveInRight 1.5s ease-out;
+
+}
+
+/* ! ANIMATIONS */
+@keyframes moveInLeft {
+  /* Browsers are optimized for the opacity and tranform properties */
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+
+  80% {
+    transform: translateX(10px) /* rotate(180deg) */;
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0) /* rotate(360deg) */;
+  }
+}
+@keyframes moveInRight {
+  /* Browsers are optimized for the opacity and tranform properties */
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+
+  80% {
+    transform: translateX(-10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
